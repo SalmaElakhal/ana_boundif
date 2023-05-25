@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "342811973500",
+    "project_id": "anaboundif-test",
+    "storage_bucket": "anaboundif-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342811973500:android:997a6cc9af6436b40a36f9",
+        "android_client_info": {
+          "package_name": "com.example.ana_boundif"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342811973500-3kq8idncmp4h025karn1flfov0v4mff6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ana_boundif",
+            "certificate_hash": "6d570308f2c77322ba760cb759bbfd2a6b505603"
+          }
+        },
+        {
+          "client_id": "342811973500-sq9ljbg5brlvcoru6eqqjq6108n3jibs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW1YRUrnRTqvCUIxZoYLW4hfliG9jZgFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342811973500-sq9ljbg5brlvcoru6eqqjq6108n3jibs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
