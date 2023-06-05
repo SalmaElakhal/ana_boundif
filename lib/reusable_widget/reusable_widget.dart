@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class logoWidget extends StatelessWidget {
-  const logoWidget({
-    super.key,
-  });
+  const logoWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +94,139 @@ Container signInSignUpButton(
               return Colors.black26;
             }
             return Color.fromARGB(255, 94, 204, 9);
-            
           }),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
+    ),
+  );
+}
+
+AppBar Appbar() {
+  return AppBar(
+    elevation: 0, // to elemine a row between appBar and body
+    automaticallyImplyLeading: false,
+    backgroundColor: Color.fromARGB(255, 3, 65, 61),
+    // shape: RoundedRectangleBorder(
+    //   borderRadius: BorderRadius.vertical(
+    //     bottom: Radius.circular(20.0),
+    //   ),
+    // ),
+    toolbarHeight: 100.0,
+    title: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {
+                // Action when more options icon is pressed
+              },
+            ),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // Action when search icon is pressed
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications),
+                  onPressed: () {
+                    // Action when notification icon is pressed
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 12.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: () {
+                // Action when "Groupes" is tapped
+              },
+              child: Text(
+                'Groupes',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(width: 16.0),
+            InkWell(
+              onTap: () {
+                // Action when "Lignes" is tapped
+              },
+              child: Text(
+                'Lignes',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(width: 16.0),
+            InkWell(
+              onTap: () {
+                // Action when "Classement" is tapped
+              },
+              child: Text(
+                'Classement',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
+AppBar AppbarDetails() {
+  return AppBar(
+    elevation: 0, // to elemine a row between appBar and body
+    automaticallyImplyLeading: true,
+    backgroundColor: Color.fromARGB(255, 3, 65, 61),
+    toolbarHeight: 80.0,
+    title: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+                margin: EdgeInsets.only(left: 90, top: 10),
+                child: Text("Détails")),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // Action when search icon is pressed
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications),
+                  onPressed: () {
+                    // Action when notification icon is pressed
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 12.0),
+      ],
     ),
   );
 }

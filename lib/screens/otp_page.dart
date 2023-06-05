@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ana_boundif/screens/home_screen.dart';
+import 'package:ana_boundif/screens/signup_nd.dart';
 //import 'package:flutter_sequence_animation/flutter_sequence_animation.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -265,7 +265,7 @@ class _OTPPageState extends State<OTPPage> {
                                       Navigator.of(context).push(
                                           PageRouteBuilder(
                                               pageBuilder: (_, __, ___) =>
-                                                  HomeScreen()));
+                                                  SignupNd()));
                                     }
                                   }
                                 },

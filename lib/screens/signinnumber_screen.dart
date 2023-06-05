@@ -1,7 +1,6 @@
 import 'package:ana_boundif/screens/otp_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:twilio_flutter/twilio_flutter.dart';
 
 //import 'package:ana_boundif/screens/otp_page.dart';
 

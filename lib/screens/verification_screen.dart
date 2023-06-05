@@ -1,6 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ana_boundif/screens/home_screen.dart';
+import 'package:ana_boundif/screens/signup_nd.dart';
 // import 'dart:math';
 
 class VerificationScreen extends StatefulWidget {
@@ -79,7 +79,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   // Naviguer vers l'écran principal après la vérification réussie
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => SignupNd()),
                   );
                 },
                 child: const Text('OK'),

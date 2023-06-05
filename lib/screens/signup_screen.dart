@@ -42,7 +42,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -174,7 +173,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(height: 20.0),
                     signInSignUpButton(context, false, () {
                       sendMail(
-                        recipientEmail: _recepientEmailController.text.toString(),
+                        recipientEmail:
+                            _recepientEmailController.text.toString(),
                         mailMessage: _mailMessageController.text.toString(),
                       );
                       FirebaseAuth.instance
@@ -183,7 +183,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         password: _passwordTextController.text,
                       )
                           .then((value) {
-                        print('voilà le code de vérification : $verificationCode');
+                        print(
+                            'voilà le code de vérification : $verificationCode');
                         // Envoyer l'e-mail de vérification avec le code
                         // sendVerificationEmail(
                         //     _emailTextController.text, verificationCode);
@@ -279,10 +280,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
- void sendMail({
+  void sendMail({
     required String recipientEmail,
-    required String mailMessage ,
-    
+    required String mailMessage,
   }) async {
     // Changez votre adresse e-mail ici
     String username = 'salma.elakhal.pro@gmail.com';
@@ -290,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String password = 'sbsakdfgzvyejxdv';
 
     final smtpServer = gmail(username, password);
-    
+
     final message = Message()
       ..from = Address(username, 'Salma')
       ..recipients.add(recipientEmail)
@@ -307,4 +307,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 }
-
