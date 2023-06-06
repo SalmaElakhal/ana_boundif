@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GroupsPage()),
+                  MaterialPageRoute(builder: (context) => GroupsScreen()),
                 );
               },
               child: Text('Home'),
