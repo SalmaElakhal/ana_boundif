@@ -1,16 +1,20 @@
 import 'package:ana_boundif/reusable_widget/reusable_widget.dart';
 import 'package:ana_boundif/screens/chat_screen.dart';
+import 'package:ana_boundif/widgets/groups/groups_body.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class DetailsGroup extends StatelessWidget {
   final String description;
   final String title;
   final String imageUrl;
-
+  String groupId = Uuid().v4(); // Génère un ID unique
+  String leagueId;
   DetailsGroup({
     required this.description,
     required this.title,
     required this.imageUrl,
+    required this.leagueId,
   });
 
   @override
@@ -341,7 +345,11 @@ class DetailsGroup extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatScreen(title: title),
+                          builder: (context) => ChatScreen(
+                            title: title,
+                            groupId: groupId,
+                            leagueId: leagueId,
+                          ),
                         ),
                       );
                     },

@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ana_boundif/screens/signup_nd.dart';
 import 'package:ana_boundif/screens/phoneauth_screen.dart';
 import 'package:ana_boundif/screens/signinnumber_screen.dart';
@@ -17,6 +17,8 @@ import 'package:ana_boundif/providers/internet_provider.dart';
 import '../utils/snack_bar.dart';
 
 class SignInScreen extends StatefulWidget {
+  
+
   const SignInScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   String verificationCode = '';
+  
 
   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
   final RoundedLoadingButtonController googleController =
@@ -140,14 +143,36 @@ class _SignInScreenState extends State<SignInScreen> {
                   password: _passwordTextController.text,
                 )
                     .then((value) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignupNd()),
-                  );
-                }).onError((error, stack) {
-                  print("Error: ${error.toString()}");
+                  FirebaseFirestore.instance
+                      .collection('users')
+                      .where('email', isEqualTo: _emailTextController.text)
+                      .get()
+                      .then((QuerySnapshot snapshot) {
+                    if (snapshot.docs.isNotEmpty) {
+                      // L'utilisateur existe dans la collection "users"
+                      // Effectuer l'action souhaitée après la connexion réussie
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignupNd()),
+                      );
+                    } else {
+                      // L'utilisateur n'existe pas dans la collection "users"
+                      // Afficher un message d'erreur ou prendre une autre action appropriée
+                      print('L\'utilisateur n\'existe pas');
+                    }
+                  }).catchError((error) {
+                    // Une erreur s'est produite lors de la recherche dans la collection "users"
+                    // Afficher un message d'erreur ou prendre une autre action appropriée
+                    print(
+                        'Erreur lors de la recherche dans la collection "users": $error');
+                  });
+                }).catchError((error) {
+                  // Une erreur s'est produite lors de la connexion avec l'e-mail et le mot de passe
+                  // Afficher un message d'erreur ou prendre une autre action appropriée
+                  print('Erreur de connexion: $error');
                 });
               }),
+
               SizedBox(height: 20.0),
               Text('Ou connectez-vous avec'),
               SizedBox(height: 10.0),
@@ -222,8 +247,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
                     RoundedLoadingButton(
                       onPressed: () {
-                         nextScreenReplace(context, const PhoneAuthScreen());
-                         phoneController.reset();
+                        nextScreenReplace(context, const PhoneAuthScreen());
+                        phoneController.reset();
                       },
                       controller: phoneController,
                       successColor: Colors.black,
@@ -349,10 +374,10 @@ class _SignInScreenState extends State<SignInScreen> {
           });
         }
       });
-
     }
   }
-   handleAfterSignIn() {
+
+  handleAfterSignIn() {
     Future.delayed(const Duration(milliseconds: 1000)).then((value) {
       nextScreenReplace(context, const SignupNd());
     });

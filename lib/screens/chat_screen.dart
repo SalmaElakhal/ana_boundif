@@ -1,16 +1,29 @@
+import 'package:ana_boundif/widgets/Chat/chat_body.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   final String title;
+  final String groupId; // Ajout du paramètre groupId
+  final String leagueId; // Ajout du paramètre leagueId
 
-  const ChatScreen({Key? key, required this.title}) : super(key: key);
+  const ChatScreen(
+      {Key? key,
+      required this.title,
+      required this.groupId,
+      required this.leagueId
+      })
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 243, 245, 245),
+      backgroundColor: Colors.white,
       appBar: AppbarChat(title: title),
-      body: Scaffold(backgroundColor: const Color.fromARGB(255, 255, 255, 255)),
+      body: ChatBody(
+          groupId: groupId,
+           leagueId:
+               leagueId
+          ), // Passer les valeurs groupId et leagueId à ChatBody
     );
   }
 }

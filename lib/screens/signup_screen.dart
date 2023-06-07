@@ -4,10 +4,11 @@ import 'package:ana_boundif/screens/verification_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ana_boundif/reusable_widget/reusable_widget.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:mailer/smtp_server/gmail.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 // import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'dart:math';
 
@@ -185,6 +186,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .then((value) {
                         print(
                             'voilà le code de vérification : $verificationCode');
+                        signUpUser();
+
                         // Envoyer l'e-mail de vérification avec le code
                         // sendVerificationEmail(
                         //     _emailTextController.text, verificationCode);
@@ -280,30 +283,86 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void sendMail({
-    required String recipientEmail,
-    required String mailMessage,
-  }) async {
-    // Changez votre adresse e-mail ici
+  void sendMail(
+      {required String recipientEmail, required String mailMessage}) async {
     String username = 'salma.elakhal.pro@gmail.com';
-    // Changez votre mot de passe ici
-    String password = 'sbsakdfgzvyejxdv';
-
+    String password = 'Salmaelakhal2003@#';
     final smtpServer = gmail(username, password);
 
     final message = Message()
-      ..from = Address(username, 'Salma')
+      ..from = Address(username, 'Salma Elakhal')
       ..recipients.add(recipientEmail)
-      ..subject = 'Subject of the email'
-      ..text = 'Message: $mailMessage';
+      ..subject = 'Email Verification'
+      ..text = mailMessage;
 
     try {
-      await send(message, smtpServer);
-      showSnackbar('E-mail envoyé avec succès');
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
     } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+      print('Error occurred while sending email: $e');
     }
   }
+
+  void signUpUser() async {
+    try {
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+      await usersCollection.add({
+        'fcmTokens': {
+          'firstname': _firstNameTextController.text,
+        },
+        'interests': {
+          'lastname': _lastNameTextController.text,
+          'password': _passwordTextController.text,
+        },
+        'email': _emailTextController.text,
+      });
+    } catch (e) {
+      print("hhhhhhhhhhhhhhhhhhhhhh$e");
+    }
+  }
+
+  // void signUpUser() async {
+  //   try {
+  //     final CollectionReference usersCollection =
+  //         FirebaseFirestore.instance.collection('users');
+
+  //     await usersCollection.add({
+  //       // 'firstName': _firstNameTextController.text,
+  //       // 'lastName': _lastNameTextController.text,
+  //       'email': _emailTextController.text,
+  //      // 'password': _passwordTextController.text,
+  //     });
+  //     // Le nouvel utilisateur a été enregistré avec succès dans Cloud Firestore.
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  // void sendMail({
+  //   required String recipientEmail,
+  //   required String mailMessage,
+  // }) async {
+  //   // Changez votre adresse e-mail ici
+  //   String username = 'salma.elakhal.pro@gmail.com';
+  //   // Changez votre mot de passe ici
+  //   String password = 'sbsakdfgzvyejxdv';
+
+  //   final smtpServer = gmail(username, password);
+
+  //   final message = Message()
+  //     ..from = Address(username, 'Salma')
+  //     ..recipients.add(recipientEmail)
+  //     ..subject = 'Subject of the email'
+  //     ..text = 'Message: $mailMessage';
+
+  //   try {
+  //     await send(message, smtpServer);
+  //     showSnackbar('E-mail envoyé avec succès');
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print(e.toString());
+  //     }
+  //   }
+  // }
 }

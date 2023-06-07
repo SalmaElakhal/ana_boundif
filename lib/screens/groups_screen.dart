@@ -10,7 +10,9 @@ class GroupsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 243, 245, 245),
       appBar: Appbar(),
-      body: GroupsBody(),
+      body: GroupsBody(
+        
+      ),
     );
   }
 }
