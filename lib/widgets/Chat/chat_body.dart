@@ -36,21 +36,21 @@ class _ChatBodyState extends State<ChatBody> {
     }
   }
 
-Future<String> getLeagueId() async {
-  var leagueSnapshot = await FirebaseFirestore.instance
-      .collection("leagues")
-      .where("id", isEqualTo: widget.leagueId)
-      .get();
+  Future<String> getLeagueId() async {
+    var leagueSnapshot = await FirebaseFirestore.instance
+        .collection("leagues")
+        .where("id", isEqualTo: widget.leagueId)
+        .get();
 
-  if (leagueSnapshot.docs.isNotEmpty) {
-    var leagueData = leagueSnapshot.docs.first.data();
-    return leagueData['id'];
+    if (leagueSnapshot.docs.isNotEmpty) {
+      var leagueData = leagueSnapshot.docs.first.data();
+      return leagueData['id'];
+    }
+
+    var groupsBody = GroupsBody();
+    var ids = await groupsBody.getId();
+    return ids.first;
   }
-
-  var groupsBody = GroupsBody();
-  var ids = await groupsBody.getId();
-  return ids.first;
-}
 
   Future<void> createGroupChat(
       String chatId, String leagueId, String userId) async {
