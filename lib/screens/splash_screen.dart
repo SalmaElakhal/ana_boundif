@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ana_boundif/providers/sign_in_provider.dart';
+import 'package:ana_boundif/screens/home_screen.dart';
 import 'package:ana_boundif/screens/signup_nd.dart';
 import 'package:ana_boundif/screens/signin_screen.dart';
 // import 'package:ana_boundif/utils/config.dart';
@@ -26,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 2), () {
       sp.isSignedIn == false
           ? nextScreen(context, const SignInScreen())
-          : nextScreen(context, const SignupNd());
+          : nextScreen(context, const HomeScreen());
     });
   }
 
@@ -45,5 +46,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-

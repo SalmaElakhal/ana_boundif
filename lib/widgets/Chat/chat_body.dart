@@ -54,22 +54,51 @@ class _ChatBodyState extends State<ChatBody> {
 
   Future<void> createGroupChat(
       String chatId, String leagueId, String userId) async {
-    // Vérifier si le groupe de chat existe déjà
-    var groupChatSnapshot =
-        await _firestore.collection("chatGroup").doc(chatId).get();
+    // Vérifier si un document avec le même leagueId existe déjà
+    var querySnapshot = await _firestore
+        .collection("chatGroup")
+        .where("idLeague", isEqualTo: leagueId)
+        .limit(1)
+        .get();
 
-    if (!groupChatSnapshot.exists) {
-      // Si le groupe de chat n'existe pas, le créer avec les détails initiaux
+    if (querySnapshot.docs.isNotEmpty) {
+      // Un document avec le même leagueId existe déjà, récupérer l'ID du document
+      var existingChatId = querySnapshot.docs.first.id;
+
+      // Récupérer le tableau des messages du groupe de chat existant
+      var existingMessages = querySnapshot.docs.first.data()['messages'];
+
+      // Créer un nouveau message
+      var newMessage = {
+        'date': DateTime.now().toString(),
+        'file': [],
+        'lu': 0,
+        'iduser': userId,
+        'message': message,
+      };
+
+      // Mettre à jour le document du groupe de chat existant pour ajouter le nouveau message
+      await _firestore.collection("chatGroup").doc(existingChatId).update({
+        'dateLastMessage': DateTime.now().toString(),
+        'messages': [...existingMessages, newMessage],
+      });
+    } else {
+      // Aucun document avec le même leagueId n'existe, créer un nouveau document
       await _firestore.collection("chatGroup").doc(chatId).set({
         'dateCreation': DateTime.now().toString(),
         'dateLastMessage': DateTime.now().toString(),
         'id': chatId,
         'idLeague': leagueId,
-        'members': [
-          userId,
-          leagueId
-        ], // Ajouter leagueId à la liste des membres
-        'messages': [],
+        'members': [userId, leagueId],
+        'messages': [
+          {
+            'date': DateTime.now().toString(),
+            'file': [],
+            'lu': 0,
+            'iduser': userId,
+            'message': message,
+          }
+        ],
       });
     }
   }
