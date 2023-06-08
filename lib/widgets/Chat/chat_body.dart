@@ -52,8 +52,15 @@ class _ChatBodyState extends State<ChatBody> {
     return ids.first;
   }
 
-  Future<void> createGroupChat(
-      String chatId, String leagueId, String userId) async {
+  Future<List<String>> getChatGroupDocumentIds() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("chatGroup").get();
+    List<String> documentIds = querySnapshot.docs.map((doc) => doc.id).toList();
+    return documentIds;
+  }
+
+  Future<void> createGroupChat(String chatId, String leagueId, String userId,
+      [String? message]) async {
     // Vérifier si un document avec le même leagueId existe déjà
     var querySnapshot = await _firestore
         .collection("chatGroup")
@@ -71,10 +78,9 @@ class _ChatBodyState extends State<ChatBody> {
       // Créer un nouveau message
       var newMessage = {
         'date': DateTime.now().toString(),
-        'file': [],
-        'lu': 0,
-        'iduser': userId,
-        'message': message,
+        'file': [
+          {'iduser': userId, 'message': message}
+        ],
       };
 
       // Mettre à jour le document du groupe de chat existant pour ajouter le nouveau message
@@ -93,10 +99,9 @@ class _ChatBodyState extends State<ChatBody> {
         'messages': [
           {
             'date': DateTime.now().toString(),
-            'file': [],
-            'lu': 0,
-            'iduser': userId,
-            'message': message,
+            'file': [
+              {'iduser': userId, 'message': message}
+            ],
           }
         ],
       });
@@ -116,10 +121,9 @@ class _ChatBodyState extends State<ChatBody> {
     // Créer un nouveau message
     var newMessage = {
       'date': currentDate,
-      'file': [],
-      'lu': 0,
-      'iduser': userId,
-      'message': message,
+      'file': [
+        {'iduser': userId, 'message': message}
+      ],
     };
 
     // Ajouter le nouveau message au tableau "messages"
@@ -128,6 +132,38 @@ class _ChatBodyState extends State<ChatBody> {
     });
   }
 
+  Future<List<Map<String, dynamic>>> getMessages(String chatId) async {
+    var chatSnapshot =
+        await _firestore.collection("chatGroup").doc(chatId).get();
+
+    if (chatSnapshot.exists) {
+      var chatData = chatSnapshot.data();
+      var messages =
+          (chatData?['messages'] as List<dynamic>).cast<Map<String, dynamic>>();
+
+      // Afficher l'ID du document de chat
+      print('ID du document de chat : $chatId');
+
+      for (var message in messages) {
+        var messageDate = message['date'];
+        var file = message['file'] as List<dynamic>;
+        for (var entry in file) {
+          var messageUser = entry['iduser'];
+          var messageContent = entry['message'];
+
+          print('Message: $messageContent');
+          print('Date: $messageDate');
+          print('User: $messageUser');
+        }
+      }
+
+      return messages;
+    } else {
+      throw Exception("Le document chatGroup avec l'ID $chatId n'existe pas.");
+    }
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
@@ -137,15 +173,36 @@ class _ChatBodyState extends State<ChatBody> {
           String leagueId = snapshot.data!;
           return Column(
             children: [
-              // ... Autres éléments de la page de chat ...
-
               Expanded(
-                child: Text(signedInUser.email ?? ''),
-                // child: ListView.builder(
-                // ... Liste des messages ...
-              ),
-              //),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text("hhh"),
 
+                      // Utilisation de la méthode pour obtenir les IDs des documents dans la collection "chatGroup"
+                      FutureBuilder<List<String>>(
+                        future: getChatGroupDocumentIds(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<String> documentIds = snapshot.data!;
+                            // Faites quelque chose avec les IDs des documents
+                            // ...
+                            return Text(
+                                "IDs des documents dans la collection 'chatGroup': $documentIds");
+                          } else if (snapshot.hasError) {
+                            return Text(
+                                "Erreur lors de la récupération des IDs des documents: ${snapshot.error}");
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      ),
+
+                      // ... Autres éléments de la page de chat ...
+                    ],
+                  ),
+                ),
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 color: Colors.white,
@@ -183,14 +240,20 @@ class _ChatBodyState extends State<ChatBody> {
                                 Icons.send,
                                 color: Colors.white,
                               ),
-                              onPressed: () {
-                                // Appeler la fonction createGroupChat pour créer un nouveau chat de groupe
-                                createGroupChat(
-                                    widget.chatId, leagueId, signedInUser.uid);
+                              onPressed: () async {
+                                await createGroupChat(
+                                  widget.chatId,
+                                  leagueId,
+                                  signedInUser.uid,
+                                  message ?? '',
+                                );
 
                                 // Appeler la fonction sendMessage pour envoyer le message
-                                sendMessage(widget.chatId, signedInUser.uid,
-                                    message ?? '');
+                                await sendMessage(
+                                  widget.chatId,
+                                  signedInUser.uid,
+                                  message ?? '',
+                                );
                               },
                             ),
                           ),
