@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
   final String title;
-  final String groupId; // Ajout du paramètre groupId
+  final String chatId; // Ajout du paramètre chatId
   final String leagueId; // Ajout du paramètre leagueId
 
   const ChatScreen(
       {Key? key,
       required this.title,
-      required this.groupId,
+      required this.chatId,
       required this.leagueId
       })
       : super(key: key);
@@ -20,10 +20,10 @@ class ChatScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppbarChat(title: title),
       body: ChatBody(
-          groupId: groupId,
+          chatId: chatId,
            leagueId:
                leagueId
-          ), // Passer les valeurs groupId et leagueId à ChatBody
+          ), // Passer les valeurs chatId et leagueId à ChatBody
     );
   }
 }

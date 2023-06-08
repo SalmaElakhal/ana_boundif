@@ -1,12 +1,13 @@
-  import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ana_boundif/widgets/groups/groups_body.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatBody extends StatefulWidget {
-  final String groupId;
+  final String chatId;
   final String leagueId;
 
- ChatBody({required this.groupId, required this.leagueId});
+  ChatBody({required this.chatId, required this.leagueId});
 
   @override
   _ChatBodyState createState() => _ChatBodyState();
@@ -35,35 +36,47 @@ class _ChatBodyState extends State<ChatBody> {
     }
   }
 
-  Future<String> getLeagueId() async {
-    var leagueSnapshot =
-        await _firestore.collection("leagues").doc(widget.leagueId).get();
-    if (leagueSnapshot.exists) {
-      var leagueData = leagueSnapshot.data();
-      return leagueData?['id'];
-    }
-    return '';
+Future<String> getLeagueId() async {
+  var leagueSnapshot = await FirebaseFirestore.instance
+      .collection("leagues")
+      .where("id", isEqualTo: widget.leagueId)
+      .get();
+
+  if (leagueSnapshot.docs.isNotEmpty) {
+    var leagueData = leagueSnapshot.docs.first.data();
+    return leagueData['id'];
   }
 
-  Future<void> createGroupChat(String groupId, String leagueId, String userId) async {
+  var groupsBody = GroupsBody();
+  var ids = await groupsBody.getId();
+  return ids.first;
+}
+
+  Future<void> createGroupChat(
+      String chatId, String leagueId, String userId) async {
     // Vérifier si le groupe de chat existe déjà
-    var groupChatSnapshot = await _firestore.collection("chatGroup").doc(groupId).get();
+    var groupChatSnapshot =
+        await _firestore.collection("chatGroup").doc(chatId).get();
+
     if (!groupChatSnapshot.exists) {
       // Si le groupe de chat n'existe pas, le créer avec les détails initiaux
-      await _firestore.collection("chatGroup").doc(groupId).set({
+      await _firestore.collection("chatGroup").doc(chatId).set({
         'dateCreation': DateTime.now().toString(),
         'dateLastMessage': DateTime.now().toString(),
-        'id': groupId,
+        'id': chatId,
         'idLeague': leagueId,
-        'members': [userId],
+        'members': [
+          userId,
+          leagueId
+        ], // Ajouter leagueId à la liste des membres
         'messages': [],
       });
     }
   }
 
-  Future<void> sendMessage(String groupId, String userId, String message) async {
+  Future<void> sendMessage(String chatId, String userId, String message) async {
     // Référence au document du chat de groupe
-    var chatRef = _firestore.collection("chatGroup").doc(groupId);
+    var chatRef = _firestore.collection("chatGroup").doc(chatId);
 
     // Obtenir la date actuelle
     var currentDate = DateTime.now().toString();
@@ -143,10 +156,12 @@ class _ChatBodyState extends State<ChatBody> {
                               ),
                               onPressed: () {
                                 // Appeler la fonction createGroupChat pour créer un nouveau chat de groupe
-                                createGroupChat(widget.groupId, leagueId, signedInUser.uid);
+                                createGroupChat(
+                                    widget.chatId, leagueId, signedInUser.uid);
 
                                 // Appeler la fonction sendMessage pour envoyer le message
-                                sendMessage(widget.groupId, signedInUser.uid, message ?? '');
+                                sendMessage(widget.chatId, signedInUser.uid,
+                                    message ?? '');
                               },
                             ),
                           ),
@@ -167,4 +182,3 @@ class _ChatBodyState extends State<ChatBody> {
     );
   }
 }
-

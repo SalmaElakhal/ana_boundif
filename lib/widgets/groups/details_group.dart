@@ -8,7 +8,7 @@ class DetailsGroup extends StatelessWidget {
   final String description;
   final String title;
   final String imageUrl;
-  String groupId = Uuid().v4(); // Génère un ID unique
+  String chatId = Uuid().v4(); // Génère un ID unique
   String leagueId;
   DetailsGroup({
     required this.description,
@@ -347,7 +347,7 @@ class DetailsGroup extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => ChatScreen(
                             title: title,
-                            groupId: groupId,
+                            chatId: chatId,
                             leagueId: leagueId,
                           ),
                         ),

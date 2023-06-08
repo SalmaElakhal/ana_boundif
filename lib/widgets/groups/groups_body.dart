@@ -4,9 +4,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ana_boundif/widgets/groups/details_group.dart';
 import 'package:uuid/uuid.dart';
 
-class GroupsBody extends StatelessWidget {
+class GroupsBody extends StatefulWidget {
   const GroupsBody({Key? key}) : super(key: key);
 
+  @override
+  _GroupsBodyState createState() => _GroupsBodyState();
+
+  Future<List<String>> getId() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection("leagues").get();
+    List<String> ids = querySnapshot.docs.map((doc) => doc.id).toList();
+    return ids;
+  }
+}
+
+class _GroupsBodyState extends State<GroupsBody> {
   Future<List<Map<String, dynamic>>> getData() async {
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection("leagues").get();
@@ -16,13 +28,17 @@ class GroupsBody extends StatelessWidget {
     return data;
   }
 
-  Future<List<Map<String, dynamic>>> getId() async {
+  Future<List<String>> getId() async {
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection("leagues").get();
-    List<Map<String, dynamic>> data = querySnapshot.docs
-        .map((doc) => doc.get("id") as Map<String, dynamic>)
-        .toList();
-    return data;
+    List<String> ids = querySnapshot.docs.map((doc) => doc.id).toList();
+    return ids;
+  }
+
+  Future<String> getImageUrl(String fileName) async {
+    Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+    String imageUrl = await storageRef.getDownloadURL();
+    return imageUrl;
   }
 
   @override
@@ -89,12 +105,6 @@ class GroupsBody extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<String> getImageUrl(String fileName) async {
-    Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
-    String imageUrl = await storageRef.getDownloadURL();
-    return imageUrl;
   }
 }
 
