@@ -135,7 +135,7 @@ class _ChatBodyState extends State<ChatBody> {
   Future<List<Map<String, dynamic>>> getMessages(String chatId) async {
     var chatSnapshot =
         await _firestore.collection("chatGroup").doc(chatId).get();
-
+    print(chatId);
     if (chatSnapshot.exists) {
       var chatData = chatSnapshot.data();
       var messages = (chatData?['messages'] as List<dynamic>?)
