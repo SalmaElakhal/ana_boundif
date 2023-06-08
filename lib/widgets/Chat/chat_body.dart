@@ -138,32 +138,35 @@ class _ChatBodyState extends State<ChatBody> {
 
     if (chatSnapshot.exists) {
       var chatData = chatSnapshot.data();
-      var messages =
-          (chatData?['messages'] as List<dynamic>).cast<Map<String, dynamic>>();
+      var messages = (chatData?['messages'] as List<dynamic>?)
+          ?.cast<Map<String, dynamic>>();
 
-      // Afficher l'ID du document de chat
-      print('ID du document de chat : $chatId');
+      if (messages != null) {
+        // Afficher l'ID du document de chat
+        print('ID du document de chat : $chatId');
 
-      for (var message in messages) {
-        var messageDate = message['date'];
-        var file = message['file'] as List<dynamic>;
-        for (var entry in file) {
-          var messageUser = entry['iduser'];
-          var messageContent = entry['message'];
+        for (var message in messages) {
+          var messageDate = message['date'];
+          var file = message['file'] as List<dynamic>;
+          for (var entry in file) {
+            var messageUser = entry['iduser'];
+            var messageContent = entry['message'];
 
-          print('Message: $messageContent');
-          print('Date: $messageDate');
-          print('User: $messageUser');
+            print('Message: $messageContent');
+            print('Date: $messageDate');
+            print('User: $messageUser');
+          }
         }
+      } else {
+        print('Pas de messages');
       }
 
-      return messages;
+      return messages ?? [];
     } else {
       throw Exception("Le document chatGroup avec l'ID $chatId n'existe pas.");
     }
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
@@ -177,28 +180,52 @@ class _ChatBodyState extends State<ChatBody> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text("hhh"),
-
-                      // Utilisation de la méthode pour obtenir les IDs des documents dans la collection "chatGroup"
                       FutureBuilder<List<String>>(
                         future: getChatGroupDocumentIds(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<String> documentIds = snapshot.data!;
-                            // Faites quelque chose avec les IDs des documents
-                            // ...
-                            return Text(
-                                "IDs des documents dans la collection 'chatGroup': $documentIds");
+                            return Column(children: [
+                              for (String chatId in documentIds)
+                                FutureBuilder<List<Map<String, dynamic>>>(
+                                  future: getMessages(chatId),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      List<Map<String, dynamic>> messages =
+                                          snapshot.data!;
+                                      return Column(
+                                        children: [
+                                          for (var message in messages)
+                                            ListTile(
+                                              title: Text(
+                                                message['file'][0]['message'],
+                                              ),
+                                              subtitle: Text(
+                                                'User: ${message['file'][0]['iduser']}, Date: ${message['date']}',
+                                              ),
+                                            ),
+                                          Divider(),
+                                        ],
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Text(
+                                        "Erreur lors de la récupération des messages: ${snapshot.error}",
+                                      );
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  },
+                                ),
+                            ]);
                           } else if (snapshot.hasError) {
                             return Text(
-                                "Erreur lors de la récupération des IDs des documents: ${snapshot.error}");
+                              "Erreur lors de la récupération des IDs des documents: ${snapshot.error}",
+                            );
                           } else {
                             return CircularProgressIndicator();
                           }
                         },
                       ),
-
-                      // ... Autres éléments de la page de chat ...
                     ],
                   ),
                 ),
