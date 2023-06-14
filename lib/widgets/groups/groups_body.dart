@@ -10,7 +10,7 @@ class GroupsBody extends StatefulWidget {
   @override
   _GroupsBodyState createState() => _GroupsBodyState();
 
-  Future<List<String>> getId() async {
+  Future<List<String>> getIdLeagues() async {
     QuerySnapshot querySnapshot =
         await FirebaseFirestore.instance.collection("leagues").get();
     List<String> ids = querySnapshot.docs.map((doc) => doc.id).toList();

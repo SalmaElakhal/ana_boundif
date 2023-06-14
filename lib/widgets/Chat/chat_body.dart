@@ -2,6 +2,7 @@ import 'package:ana_boundif/widgets/groups/groups_body.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatBody extends StatefulWidget {
   final String chatId;
@@ -48,7 +49,7 @@ class _ChatBodyState extends State<ChatBody> {
     }
 
     var groupsBody = GroupsBody();
-    var ids = await groupsBody.getId();
+    var ids = await groupsBody.getIdLeagues();
     return ids.first;
   }
 
@@ -167,6 +168,24 @@ class _ChatBodyState extends State<ChatBody> {
     }
   }
 
+  String formatMessageTime(String messageTime) {
+    DateTime now = DateTime.now();
+    DateTime messageDateTime = DateTime.parse(messageTime);
+    Duration difference = now.difference(messageDateTime);
+
+    if (difference.inSeconds < 60) {
+      return "${difference.inSeconds} second${difference.inSeconds == 1 ? '' : 's'} ago";
+    } else if (difference.inMinutes < 60) {
+      return "${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago";
+    } else if (difference.inHours < 24) {
+      return "${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago";
+    } else if (difference.inDays < 30) {
+      return "${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago";
+    } else {
+      return DateFormat('yyyy-MM-dd').format(messageDateTime);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
@@ -185,38 +204,95 @@ class _ChatBodyState extends State<ChatBody> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             List<String> documentIds = snapshot.data!;
-                            return Column(children: [
-                              for (String chatId in documentIds)
-                                FutureBuilder<List<Map<String, dynamic>>>(
-                                  future: getMessages(chatId),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      List<Map<String, dynamic>> messages =
-                                          snapshot.data!;
-                                      return Column(
-                                        children: [
-                                          for (var message in messages)
-                                            ListTile(
-                                              title: Text(
-                                                message['file'][0]['message'],
+                            return Column(
+                              children: [
+                                for (String chatId in documentIds)
+                                  FutureBuilder<List<Map<String, dynamic>>>(
+                                    future: getMessages(chatId),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        List<Map<String, dynamic>> messages =
+                                            snapshot.data!;
+                                        return Column(
+                                          children: [
+                                            for (var message in messages)
+                                              Column(
+                                                children: [
+                                                  ListTile(
+                                                    leading: CircleAvatar(
+                                                      // Profile icon
+                                                      // Replace with appropriate data from the message
+                                                      child: Icon(Icons.person),
+                                                    ),
+                                                    title: Row(
+                                                      children: [
+                                                        Text(
+                                                          'Salma Elakhal',
+                                                          // Replace with appropriate data from the message
+                                                        ),
+                                                        SizedBox(width: 10),
+                                                        Text(
+                                                          formatMessageTime(
+                                                              message['date']),
+                                                          // Format the message time using the formatMessageTime function
+                                                          style: TextStyle(
+                                                              fontSize: 12),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 0.0),
+                                                          child: Text(
+                                                            FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser
+                                                                    ?.email ??
+                                                                '',
+                                                            // Use Firebase Auth to get the authenticated user's email
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 10.0,
+                                                                  left: 0.0),
+                                                          child: Text(
+                                                            message['file'][0]
+                                                                ['message'],
+                                                            // Replace with appropriate data from the message
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Divider(
+                                                    color: Colors
+                                                        .black, // Add a line separator
+                                                  ),
+                                                ],
                                               ),
-                                              subtitle: Text(
-                                                'User: ${message['file'][0]['iduser']}, Date: ${message['date']}',
-                                              ),
-                                            ),
-                                          Divider(),
-                                        ],
-                                      );
-                                    } else if (snapshot.hasError) {
-                                      return Text(
-                                        "Erreur lors de la récupération des messages: ${snapshot.error}",
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator();
-                                    }
-                                  },
-                                ),
-                            ]);
+                                          ],
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                          "Erreur lors de la récupération des messages: ${snapshot.error}",
+                                        );
+                                      } else {
+                                        return CircularProgressIndicator();
+                                      }
+                                    },
+                                  ),
+                              ],
+                            );
                           } else if (snapshot.hasError) {
                             return Text(
                               "Erreur lors de la récupération des IDs des documents: ${snapshot.error}",

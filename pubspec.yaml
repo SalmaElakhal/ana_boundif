@@ -43,8 +43,8 @@ dependencies:
   firebase_storage: ^11.2.2
   cloud_firestore: ^4.8.0
   uuid: ^3.0.7
-  
-
+  flutter_fortune_wheel: ^1.2.1
+  rxdart: ^0.27.7
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -67,7 +67,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  # fonts:
+  #   - family: GameFont
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/

@@ -1,6 +1,6 @@
 import 'package:ana_boundif/reusable_widget/reusable_widget.dart';
 import 'package:ana_boundif/screens/chat_screen.dart';
-import 'package:ana_boundif/widgets/groups/groups_body.dart';
+import 'package:ana_boundif/widgets/groups/add_group.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -312,7 +312,13 @@ class _DetailsGroupState extends State<DetailsGroup> {
                         Container(
                           margin: EdgeInsets.only(top: 35, left: 70),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddGroup()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: Color(0xFF9FC627),
                               shape: RoundedRectangleBorder(
@@ -323,7 +329,7 @@ class _DetailsGroupState extends State<DetailsGroup> {
                               shadowColor: Colors.green,
                             ),
                             child: Text(
-                              "Ajouter des défis",
+                              "Ajouter un groupe",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
@@ -366,7 +372,7 @@ class _DetailsGroupState extends State<DetailsGroup> {
                     elevation: 4.0,
                   ),
                   child: Text(
-                    'Rejoindre le chat',
+                    'Rejoindre le chat ',
                     style: TextStyle(
                       fontFamily: 'Open Sans',
                       fontStyle: FontStyle.normal,
