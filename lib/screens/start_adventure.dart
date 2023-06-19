@@ -1,4 +1,7 @@
+import 'package:ana_boundif/screens/defi_screen.dart';
+import 'package:ana_boundif/screens/groups_screen.dart';
 import 'package:ana_boundif/screens/home_screen.dart';
+import 'package:ana_boundif/widgets/groups/add_groupe.dart';
 import 'package:flutter/material.dart';
 
 class StartAdventurePage extends StatelessWidget {
@@ -35,7 +38,10 @@ class StartAdventurePage extends StatelessWidget {
             SizedBox(height: 30.0),
             ElevatedButton(
               onPressed: () {
-                // Action when first large button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DefisScreen()),
+                );
               },
               child: Text(
                 'Solo',
@@ -65,7 +71,10 @@ class StartAdventurePage extends StatelessWidget {
             SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () {
-                // Action when second large button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GroupsScreen()),
+                );
               },
               child: Text(
                 'Rejoindre un groupe',
@@ -95,7 +104,10 @@ class StartAdventurePage extends StatelessWidget {
             SizedBox(height: 100.0),
             ElevatedButton.icon(
               onPressed: () {
-                // Action when "Créer un groupe" button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddChat()),
+                );
               },
               icon: Icon(
                 Icons.add,

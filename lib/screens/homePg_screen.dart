@@ -1,5 +1,7 @@
-import 'package:ana_boundif/widgets/Game&Quiz/Game_page.dart';
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
+import 'package:ana_boundif/widgets/Game&Quiz/Game_page.dart';
 
 class HomePgScreen extends StatefulWidget {
   const HomePgScreen({Key? key}) : super(key: key);
@@ -420,7 +422,7 @@ class _HomePgScreenState extends State<HomePgScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => SpinWheel()),
+                                          builder: (context) => Game()),
                                     );
                                   },
                                   child: Text(
