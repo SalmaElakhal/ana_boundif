@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddChat extends StatefulWidget {
   const AddChat({Key? key}) : super(key: key);
@@ -8,106 +11,67 @@ class AddChat extends StatefulWidget {
 }
 
 class _AddChatState extends State<AddChat> {
+  File? selectedImage;
+
+  void _importImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      setState(() {
+        selectedImage = File(pickedImage.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
       body: Container(
         color: Color.fromARGB(255, 3, 65, 61),
-        child: Container(
-          margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(20),
-                width: 340, // Largeur du container
-                height: 220, // Hauteur du container
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 243, 253, 241),
-                  border: Border.all(
-                    color: Color.fromRGBO(51, 140, 129, 0.36),
-                    width: 1,
-                    // style: BorderStyle.dashed,
-                  ),
-                  borderRadius: BorderRadius.circular(33),
-                ),
-                child: Column(
-                  children: [
-                    Image.asset('images/addGroup.png'),
-                    SizedBox(height: 8),
-                    Text(
-                      'Sélectionnez une image de couverture',
-                      style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: Color(0xFF424242),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'La taille maximale est de 1mo',
-                      style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Color.fromRGBO(66, 66, 66, 0.54),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.only(left: 20, right: 20),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF6F6F6),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 16,
-                      top: 12,
-                      child: Text(
-                        'Titre',
+        child: InkWell(
+          onTap: _importImage,
+          child: Container(
+            margin: EdgeInsets.all(20),
+            width: 340,
+            height: 220,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: selectedImage != null
+                ? Image.file(
+                    selectedImage!,
+                    fit: BoxFit.cover,
+                  )
+                : Column(
+                    children: [
+                      Image.asset('images/addGroup.png'),
+                      SizedBox(height: 8),
+                      Text(
+                        'Sélectionnez une image de couverture',
                         style: TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 15,
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
                           color: Color(0xFF424242),
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Positioned(
-                      left: 16,
-                      top: 40,
-                      right: 16,
-                      bottom: 12,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Titre',
-                          hintStyle: TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Color(0xFF424242),
-                          ),
+                      SizedBox(height: 8),
+                      Text(
+                        'La taille maximale est de 1mo',
+                        style: TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Color.fromRGBO(66, 66, 66, 0.54),
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                    ],
+                  ),
           ),
         ),
       ),
@@ -127,7 +91,7 @@ class _AddChatState extends State<AddChat> {
             children: [
               Container(
                 margin: EdgeInsets.only(left: 58, top: 5),
-                child: Text("Ajouter un groupe"),
+                child: Text("Ajoutedddr un groupe"),
               ),
             ],
           ),

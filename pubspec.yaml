@@ -45,6 +45,8 @@ dependencies:
   uuid: ^3.0.7
   flutter_fortune_wheel: ^1.2.1
   rxdart: ^0.27.7
+  file_picker: ^5.3.2
+  image_picker: ^0.8.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

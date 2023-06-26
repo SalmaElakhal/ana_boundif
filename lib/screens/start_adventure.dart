@@ -1,6 +1,7 @@
 import 'package:ana_boundif/screens/defi_screen.dart';
 import 'package:ana_boundif/screens/groups_screen.dart';
 import 'package:ana_boundif/screens/home_screen.dart';
+import 'package:ana_boundif/widgets/groups/add_group.dart';
 import 'package:ana_boundif/widgets/groups/add_groupe.dart';
 import 'package:flutter/material.dart';
 
@@ -106,7 +107,7 @@ class StartAdventurePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddChat()),
+                  MaterialPageRoute(builder: (context) => AddGroup()),
                 );
               },
               icon: Icon(

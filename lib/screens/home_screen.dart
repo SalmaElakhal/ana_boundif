@@ -24,6 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool showBottomNavigationBar = true;
+
+    if (_currentIndex == 3 || _currentIndex == 2) {
+      showBottomNavigationBar = false;
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -40,44 +46,45 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              type: BottomNavigationBarType.fixed,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Accueil',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.group),
-                  label: 'Groupes',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.assignment),
-                  label: 'Défis',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.west),
-                  label: 'Quiz',
-                ),
-              ],
-              onTap: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-                if (index == 1) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GroupsScreen()),
-                  );
-                }
-              },
+          if (showBottomNavigationBar) // Condition pour afficher ou masquer la barre de navigation
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: BottomNavigationBar(
+                currentIndex: _currentIndex,
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Accueil',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.group),
+                    label: 'Groupes',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.assignment),
+                    label: 'Défis',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.west),
+                    label: 'Quiz',
+                  ),
+                ],
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                  if (index == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GroupsScreen()),
+                    );
+                  }
+                },
+              ),
             ),
-          ),
         ],
       ),
     );

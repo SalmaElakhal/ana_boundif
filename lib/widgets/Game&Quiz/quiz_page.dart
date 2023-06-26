@@ -1,3 +1,4 @@
+import 'package:ana_boundif/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class Quiz extends StatefulWidget {
@@ -19,6 +20,7 @@ class _QuizState extends State<Quiz> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
+      extendBody: true,
       body: Container(
         color: Color.fromARGB(255, 3, 65, 61),
         child: Container(
@@ -33,7 +35,7 @@ class _QuizState extends State<Quiz> {
                 child: SingleChildScrollView(
                   controller: _scrollController,
                   child: Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: EdgeInsets.only(top: 40),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -50,7 +52,7 @@ class _QuizState extends State<Quiz> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 40),
                         if (!showResult)
                           Column(
                             children: [
@@ -160,7 +162,7 @@ class _QuizState extends State<Quiz> {
                                 onPressed: () {
                                   setState(() {
                                     selectedButtonIndex = 3;
-                                    showResult = true;
+                                    showResult = false;
                                     additionalMessage = '';
                                   });
                                   _scrollToBottom();
@@ -189,6 +191,28 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 150.0),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Ajoutez ici l'action à effectuer lors du clic sur le bouton "Terminer"
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFF9FC627),
+                                  onPrimary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide.none,
+                                  ),
+                                  elevation: 6,
+                                  shadowColor: Color(0xFF338C81),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 120, vertical: 17),
+                                ),
+                                child: Text(
+                                  'Répondre',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
                         if (showResult)
@@ -209,7 +233,7 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 5),
                               TextButton(
                                 style: ButtonStyle(
                                   backgroundColor:
@@ -265,7 +289,7 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 20),
                               Padding(
                                 padding: const EdgeInsets.only(
                                     right: 145.0, bottom: 5),
@@ -281,7 +305,7 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 5),
                               TextButton(
                                 style: ButtonStyle(
                                   backgroundColor:
@@ -328,7 +352,7 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 20),
                               Padding(
                                 padding: const EdgeInsets.only(
                                     right: 60.0, bottom: 5),
@@ -357,7 +381,9 @@ class _QuizState extends State<Quiz> {
                               ),
                               SizedBox(height: 0),
                               Padding(
-                                padding: const EdgeInsets.only(left: 28.0),
+                                padding: const EdgeInsets.only(
+                                  left: 28.0,
+                                ),
                                 child: Text(
                                   'Global average temperatures have increased more than 1.4 degrees Fahrenheit over the last 100 years. Scientists project that Earth\'s average temperature will rise between two and 12 degrees Fahrenheit by 2100.',
                                   textAlign: TextAlign.left,
@@ -370,10 +396,34 @@ class _QuizState extends State<Quiz> {
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                height: 50,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Ajoutez ici l'action à effectuer lors du clic sur le bouton "Terminer"
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xFFFFC107),
+                                  onPrimary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide.none,
+                                  ),
+                                  elevation: 6,
+                                  shadowColor: Color(0xFF338C81),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 120, vertical: 17),
+                                ),
+                                child: Text(
+                                  'Terminer',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
                         SizedBox(
-                          height: 50,
+                          height: 20,
                         ),
                       ],
                     ),
@@ -409,7 +459,10 @@ class _QuizState extends State<Quiz> {
           IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Ajoutez ici la logique pour revenir en arrière
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
             },
           ),
           Container(
