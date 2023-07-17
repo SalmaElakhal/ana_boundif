@@ -1,6 +1,6 @@
+import 'package:ana_boundif/reusable_widget/reusable_widget.dart';
+import 'package:ana_boundif/widgets/groups/groups_body.dart';
 import 'package:flutter/material.dart';
-import '../reusable_widget/reusable_widget.dart';
-import '../widgets/groups/groups_body.dart';
 
 class GroupsScreen extends StatelessWidget {
   const GroupsScreen({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class GroupsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 243, 245, 245),
       appBar: Appbar(),
-      body: GroupsBody(),
+      body: const GroupsBody(),
     );
   }
 }
